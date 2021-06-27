@@ -3,6 +3,7 @@ package fr.alvisevenezia;
 import fr.alvisevenezia.Utils.VERSION;
 import fr.alvisevenezia.Web.DiscussPacket.DiscussPacket;
 import fr.alvisevenezia.Web.DiscussPacket.DiscussPacketHandler;
+import fr.alvisevenezia.encryption.symmetrical.SymmetricalEncryptedMessage;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -48,12 +49,31 @@ public class ServerThreadTCP extends Thread{
                 System.out.println("PACKET ID : " +receivedDiscussPacket[i].getPacketId());
                 System.out.println("DATA TYPE: " +receivedDiscussPacket[i].getDataType());
                 System.out.println("PACKET SIZE : " +receivedDiscussPacket[i].getSize());
-                System.out.println(new String(receivedDiscussPacket[i].getData(), StandardCharsets.UTF_16));
+                for(byte b : receivedDiscussPacket[i].getData()){
+
+                    System.out.print(b);
+
+                }
+
+                System.out.println('\n');
+
                 System.out.println(" ");
 
             }
 
-            System.out.println(new String(discussPacketHandler.getMergedByteArray(receivedDiscussPacket),StandardCharsets.UTF_16));
+            byte[] byteArray = discussPacketHandler.getMergedByteArray(receivedDiscussPacket);
+
+            System.out.print("BYTE MSG : ");
+
+            for(byte b : byteArray){
+
+                System.out.print(b);
+
+            }
+
+            System.out.println('\n');
+
+            System.out.println("MSG : " +SymmetricalEncryptedMessage.getDecryptedMessage(discussPacketHandler.getMergedByteArray(receivedDiscussPacket),"caca"));
 
             socket.close();
 
