@@ -34,12 +34,22 @@ public class ServerThreadTCP extends Thread{
 
             byte[] incomingByte = socket.getInputStream().readAllBytes();
 
+            System.out.print("BYTE MSG : ");
+
+            for(byte b : incomingByte){
+
+                System.out.print(b);
+
+            }
+
+            System.out.println('\n');
+
             System.out.println("INCOMING BYTE QUANTITY : "+incomingByte.length);
 
             DiscussPacketHandler discussPacketHandler = new DiscussPacketHandler(VERSION.BETA,null,0,0);
             DiscussPacket[] receivedDiscussPacket = discussPacketHandler.getDiscussPacketArrayFromByteArray(incomingByte);
 
-            System.out.println(receivedDiscussPacket.length);
+            System.out.println("RECIEVED PACKET QUANTITY : "+receivedDiscussPacket.length);
 
             for(int i = 0;i< receivedDiscussPacket.length;i++) {
 
@@ -49,6 +59,9 @@ public class ServerThreadTCP extends Thread{
                 System.out.println("PACKET ID : " +receivedDiscussPacket[i].getPacketId());
                 System.out.println("DATA TYPE: " +receivedDiscussPacket[i].getDataType());
                 System.out.println("PACKET SIZE : " +receivedDiscussPacket[i].getSize());
+
+                System.out.print("PACKET DATA : ");
+
                 for(byte b : receivedDiscussPacket[i].getData()){
 
                     System.out.print(b);
@@ -58,16 +71,6 @@ public class ServerThreadTCP extends Thread{
                 System.out.println('\n');
 
                 System.out.println(" ");
-
-            }
-
-            byte[] byteArray = discussPacketHandler.getMergedByteArray(receivedDiscussPacket);
-
-            System.out.print("BYTE MSG : ");
-
-            for(byte b : byteArray){
-
-                System.out.print(b);
 
             }
 
