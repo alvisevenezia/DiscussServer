@@ -59,24 +59,43 @@ public class ServerThreadTCP extends Thread{
                 System.out.println("PACKET ID : " +receivedDiscussPacket[i].getPacketId());
                 System.out.println("DATA TYPE: " +receivedDiscussPacket[i].getDataType());
                 System.out.println("PACKET SIZE : " +receivedDiscussPacket[i].getSize());
+                System.out.println("ACTUAL PACKET SIZE : " +receivedDiscussPacket[i].getActualSize());
 
                 System.out.print("PACKET DATA : ");
+
+                int id = 0;
 
                 for(byte b : receivedDiscussPacket[i].getData()){
 
                     System.out.print(b);
+                    id++;
+                }
+
+                System.out.println('\n');
+
+                byte[] array = discussPacketHandler.getMergedByteArray(receivedDiscussPacket);
+
+                System.out.print("MERGED PACKET DATA : ");
+
+                id = 0;
+
+                for(byte b : array){
+
+                    System.out.print(b);
+                    id++;
 
                 }
 
                 System.out.println('\n');
 
-                System.out.println(" ");
+
 
             }
 
             System.out.println('\n');
 
             System.out.println("MSG : " +SymmetricalEncryptedMessage.getDecryptedMessage(discussPacketHandler.getMergedByteArray(receivedDiscussPacket),"caca"));
+
 
             socket.close();
 
