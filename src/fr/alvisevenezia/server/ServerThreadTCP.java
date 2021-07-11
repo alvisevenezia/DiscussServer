@@ -1,9 +1,11 @@
-package fr.alvisevenezia;
+package fr.alvisevenezia.server;
 
-import fr.alvisevenezia.Utils.VERSION;
-import fr.alvisevenezia.Web.DiscussPacket.DiscussPacket;
-import fr.alvisevenezia.Web.DiscussPacket.DiscussPacketHandler;
 import fr.alvisevenezia.encryption.symmetrical.SymmetricalEncryptedMessage;
+import fr.alvisevenezia.utils.VERSION;
+import fr.alvisevenezia.utils.csv.CSVBuilder;
+import fr.alvisevenezia.web.discusspacket.DiscussPacket;
+import fr.alvisevenezia.web.discusspacket.DiscussPacketHandler;
+import fr.alvisevenezia.web.utils.DATAType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,9 +15,11 @@ import java.nio.charset.StandardCharsets;
 public class ServerThreadTCP extends Thread{
 
     private Socket socket;
+    private String IDUserListFilePath;
 
-    public ServerThreadTCP(Socket socket) {
+    public ServerThreadTCP(Socket socket, String IDUserListFilePath) {
         this.socket = socket;
+        this.IDUserListFilePath = IDUserListFilePath;
     }
 
     public void run(){
@@ -79,9 +83,18 @@ public class ServerThreadTCP extends Thread{
 
                 id = 0;
 
+                if(receivedDiscussPacket[i].getDataType() == DATAType.ID){
+
+                    String msg = new String(array, StandardCharsets.UTF_8);
+
+
+                    CSVBuilder.addToFile(IDUserListFilePath,msg);
+
+                }
+
                 for(byte b : array){
 
-                    System.out.print(b);
+                    System.out.print(b+" ");
                     id++;
 
                 }
@@ -91,7 +104,6 @@ public class ServerThreadTCP extends Thread{
 
 
             }
-
             System.out.println('\n');
 
             System.out.println("MSG : " +SymmetricalEncryptedMessage.getDecryptedMessage(discussPacketHandler.getMergedByteArray(receivedDiscussPacket),"caca"));
